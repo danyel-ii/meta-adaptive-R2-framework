@@ -17,7 +17,7 @@
 \maketitle
 
 \begin{abstract}
-We introduce a novel framework for meta-adaptive recursive self-improvement in artificial intelligence (AI) systems. Building upon principles from cybernetics, meta-learning, and AI alignment, we formalize two interleaved loops: (1) the R\textsuperscript{1} loop, where an Architect, Curator, and Critic co-evolve a model through iterative feedback; and (2) the R\textsuperscript{2} loop, where a MetaOverseer monitors and adapts multiple R\textsuperscript{1} processes to enhance long-term system resilience. We demonstrate this framework through simulation, incorporating confidence-weighted updates and memory decay to handle noise and non-stationarity. Results show that the system exhibits meta-adaptive resilience — the ability to improve its learning strategies over time in response to dynamic environments.
+We introduce a novel framework for meta-adaptive recursive self-improvement in artificial intelligence (AI) systems. Building upon principles from cybernetics, meta-learning, and AI alignment, we formalize two interleaved loops: (1) the R\textsuperscript{1} loop, where an Architect, Curator, and Critic co-evolve a model through iterative feedback; and (2) the R\textsuperscript{2} loop, where a MetaGuidance monitors and adapts multiple R\textsuperscript{1} processes to enhance long-term system resilience. We demonstrate this framework through simulation, incorporating confidence-weighted updates and memory decay to handle noise and non-stationarity. Results show that the system exhibits meta-adaptive resilience — the ability to improve its learning strategies over time in response to dynamic environments.
 \end{abstract}
 
 \section{Introduction}
@@ -77,27 +77,27 @@ This triadic loop provides a general schema applicable across various AI problem
 Each domain fits into the same R\textsuperscript{1} schema, enabling systematic refinement.
 
 \section{The Meta-Recursive Self-Improvement Loop (R\textsuperscript{2})}
-Above the R\textsuperscript{1} loop sits a MetaOverseer (M), responsible for learning how to improve the improvement process.
+Above the R\textsuperscript{1} loop sits a MetaGuidance (M), responsible for learning how to improve the improvement process.
 
-\subsection{MetaOverseer Function}
-At the core of R\textsuperscript{2} is the MetaOverseer (M). The MetaOverseer observes the performance of multiple R\textsuperscript{1} loops across different tasks and learns to configure them optimally.
+\subsection{MetaGuidance Function}
+At the core of R\textsuperscript{2} is the MetaGuidance (M). The MetaGuidance observes the performance of multiple R\textsuperscript{1} loops across different tasks and learns to configure them optimally.
 
 \textbf{Formalization:}
-The R\textsuperscript{2} loop is formalized as the MetaOverseer optimizing the R\textsuperscript{1} loop's configuration:
+The R\textsuperscript{2} loop is formalized as the MetaGuidance optimizing the R\textsuperscript{1} loop's configuration:
 $$ M(R^1) \rightarrow \Delta R^{1'} $$
-Where $M$ is the MetaOverseer, operating on the existing $R^1$ loop, and generating $\Delta R^{1'}$ which represents changes or improvements in the structure or parameters of the $R^1$ loop itself. This includes modifying `Architect` strategies, `Curator` protocols, or `Critic` evaluation criteria.
+Where $M$ is the MetaGuidance, operating on the existing $R^1$ loop, and generating $\Delta R^{1'}$ which represents changes or improvements in the structure or parameters of the $R^1$ loop itself. This includes modifying `Architect` strategies, `Curator` protocols, or `Critic` evaluation criteria.
 
 \subsection{Conceptual Diagram Description}
-Envision two tiers. On the lower tier, multiple R\textsuperscript{1} Triadic Loops operate independently, each cycling through A $\rightarrow$ D $\rightarrow$ I $\rightarrow$ A'. On the upper tier, the MetaOverseer sits above these R\textsuperscript{1} loops. Arrows flow from each R\textsuperscript{1} loop up to the MetaOverseer (representing `outcome_metrics` or `task_profiles`), and arrows flow from the MetaOverseer down to the R\textsuperscript{1} loops (representing new `loop_configs` or meta-strategies). This creates a feedback loop where the MetaOverseer learns how to optimize optimization.
+Envision two tiers. On the lower tier, multiple R\textsuperscript{1} Triadic Loops operate independently, each cycling through A $\rightarrow$ D $\rightarrow$ I $\rightarrow$ A'. On the upper tier, the MetaGuidance sits above these R\textsuperscript{1} loops. Arrows flow from each R\textsuperscript{1} loop up to the MetaGuidance (representing `outcome_metrics` or `task_profiles`), and arrows flow from the MetaGuidance down to the R\textsuperscript{1} loops (representing new `loop_configs` or meta-strategies). This creates a feedback loop where the MetaGuidance learns how to optimize optimization.
 
 \subsection{Meta-Learning Strategy}
-The MetaOverseer employs a meta-learning strategy that focuses on proposing and updating configurations based on observed performance and resilience mechanisms:
+The MetaGuidance employs a meta-learning strategy that focuses on proposing and updating configurations based on observed performance and resilience mechanisms:
 \begin{itemize}
     \item \textbf{`propose_config(task_profile)`:} Selects R\textsuperscript{1} loop configurations (e.g., strategies for the Architect, Curator, or Critic) based on a learned meta-model. This may involve retrieving previously successful configurations for similar tasks or initiating exploration for novel ones.
     \item \textbf{`update_model(task_id, config, outcome_metric)`:} Processes the performance feedback from R\textsuperscript{1} loops. This method incorporates key resilience mechanisms:
     \begin{itemize}
         \item \textbf{Confidence-Weighted Updates:} Updates to "best" configurations are only made if the new performance significantly exceeds the current best by a `confidence_margin`, preventing overreaction to noise.
-        \item \textbf{Memory Decay (`forget_threshold`):} If the average recent performance of a `task_id`'s "best" configuration degrades significantly beyond a `forget_threshold`, the MetaOverseer "forgets" that configuration, prompting re-exploration. This enables adaptive re-evaluation and recovery from non-stationarity.
+        \item \textbf{Memory Decay (`forget_threshold`):} If the average recent performance of a `task_id`'s "best" configuration degrades significantly beyond a `forget_threshold`, the MetaGuidance "forgets" that configuration, prompting re-exploration. This enables adaptive re-evaluation and recovery from non-stationarity.
         \item \textbf{Performance Window:} Uses an average of recent outcomes over a defined `performance_window_size` to ensure stable evaluation amidst noise.
     \end{itemize}
 \end{itemize}
@@ -109,7 +109,7 @@ To evaluate the R\textsuperscript{2} loop and the emergent meta-adaptive resilie
 \begin{itemize}
     \item \textbf{Tasks:} Defined on a grid (e.g., “Hallucination\_01”, “BiasReduction\_01”, “UncertaintyEstimation\_01”, “FactualRobustness\_01” - an unseen generalization task). Each task has an inherent `task_difficulty`.
     \item \textbf{R\textsuperscript{1} Loop Simulation:} A `SimplifiedTriadicLoop` class simulates a single R\textsuperscript{1} iteration, returning a `noisy outcome_metric` based on the proposed `config_quality` and `task_difficulty`, with added Gaussian noise. Lower `outcome_metric` indicates better performance.
-    \item \textbf{R\textsuperscript{2} Loop Execution:} The `ResilientMetaOverseer` governs the overall simulation, proposing configurations, logging outcomes, and updating its internal meta-model.
+    \item \textbf{R\textsuperscript{2} Loop Execution:} The `ResilientMetaGuidance` governs the overall simulation, proposing configurations, logging outcomes, and updating its internal meta-model.
 \end{itemize}
 
 \subsection{Key Pseudocode (Simplified)}
@@ -139,7 +139,7 @@ class SimplifiedTriadicLoop:
         outcome_metric = raw_score + noise
         return max(0, outcome_metric) # Ensure metric is non-negative
 
-class ResilientMetaOverseer:
+class ResilientMetaGuidance:
     def __init__(self):
         self.meta_model = {} # Stores best_config, best_metric for each task_profile
         self.performance_history = {} # Stores recent outcomes for each task_profile
@@ -164,7 +164,7 @@ class ResilientMetaOverseer:
 
     def update_model(self, task_profile, config, outcome_metric):
         """
-        Updates the MetaOverseer's internal model based on a new outcome.
+        Updates the MetaGuidance's internal model based on a new outcome.
         Incorporates confidence-weighted updates and memory decay.
         Args:
             task_profile (str): Identifier for the task.
@@ -194,37 +194,37 @@ class ResilientMetaOverseer:
             # Memory decay: forget if recent performance has significantly degraded
             # (Note: lower outcome_metric is better, so degradation means avg_recent_perf is higher)
             elif avg_recent_perf > current_best_metric + self.forget_threshold:
-                print(f"MetaOverseer: Forgetting config for {task_profile} due to degradation.")
+                print(f"MetaGuidance: Forgetting config for {task_profile} due to degradation.")
                 del self.meta_model[task_profile] # Trigger re-exploration for this task
 \end{verbatim}
 
 \section{Results and Discussion}
-We ran simulations across a grid of tasks with varying difficulties and noise levels. The MetaOverseer's performance was evaluated based on stability, generalization, and adaptivity.
+We ran simulations across a grid of tasks with varying difficulties and noise levels. The MetaGuidance was evaluated based on stability, generalization, and adaptivity.
 
 \subsection{Conceptual Learning Trace Plot Description}
 A conceptual multi-line plot (not included in this text) would show `Outcome Metric` (Y-axis, lower is better) versus `Simulation Iteration` (X-axis). Each line represents the performance trace for a distinct task. Key observations from such a plot include:
 \begin{itemize}
-    \item \textbf{Hallucination\_01 and BiasReduction\_01:} These tasks would exhibit initial fluctuations due to noise, followed by a gradual decrease in the outcome metric, indicating stable convergence towards optimal performance. The MetaOverseer's confidence-weighted updates would smooth out minor noisy dips.
-    \item \textbf{UncertaintyEstimation\_01:} This might show more pronounced oscillations or even temporary degradation before recovery, reflecting the inherent challenge of the task and the MetaOverseer's adaptive re-evaluation triggered by memory decay.
+    \item \textbf{Hallucination\_01 and BiasReduction\_01:} These tasks would exhibit initial fluctuations due to noise, followed by a gradual decrease in the outcome metric, indicating stable convergence towards optimal performance. The MetaGuidance's confidence-weighted updates would smooth out minor noisy dips.
+    \item \textbf{UncertaintyEstimation\_01:} This might show more pronounced oscillations or even temporary degradation before recovery, reflecting the inherent challenge of the task and the MetaGuidance's adaptive re-evaluation triggered by memory decay.
     \item \textbf{FactualRobustness\_01 (Unseen Task):} This task would demonstrate strong generalization, starting with a relatively low (good) outcome metric from the early iterations, showing that effective configurations learned from other tasks were successfully applied or rapidly discovered.
 \end{itemize}
 
 \subsection{Key Observations}
 \begin{itemize}
-    \item \textbf{Meta-Adaptive Resilience:} The combination of confidence-weighted updates and memory decay allowed the MetaOverseer to operate robustly in noisy environments. It learned to distinguish genuine improvements from stochastic fluctuations and adaptively re-evaluate stale strategies, preventing overfitting to transient optima.
-    \item \textbf{Self-Correction via Forgetting:} The `forget_threshold` mechanism proved crucial for long-term adaptivity. When a task's performance degraded (e.g., due to prolonged noise or a sub-optimal "best" configuration getting stuck), the MetaOverseer dynamically "forgot" that configuration, prompting renewed exploration and often leading to performance recovery.
-    \item \textbf{Generalization Across Tasks:} The MetaOverseer successfully applied configurations learned from one task domain to new, unseen tasks, demonstrating its ability to generalize improvement strategies. This transfer gain significantly accelerated learning on novel problems.
+    \item \textbf{Meta-Adaptive Resilience:} The combination of confidence-weighted updates and memory decay allowed the MetaGuidance to operate robustly in noisy environments. It learned to distinguish genuine improvements from stochastic fluctuations and adaptively re-evaluate stale strategies, preventing overfitting to transient optima.
+    \item \textbf{Self-Correction via Forgetting:} The `forget_threshold` mechanism proved crucial for long-term adaptivity. When a task's performance degraded (e.g., due to prolonged noise or a sub-optimal "best" configuration getting stuck), the MetaGuidance dynamically "forgot" that configuration, prompting renewed exploration and often leading to performance recovery.
+    \item \textbf{Generalization Across Tasks:} The MetaGuidance successfully applied configurations learned from one task domain to new, unseen tasks, demonstrating its ability to generalize improvement strategies. This transfer gain significantly accelerated learning on novel problems.
 \end{itemize}
 These results collectively illustrate the emergence of second-order robustness: the system not only improves its task performance but also dynamically manages its own meta-learning process under uncertainty.
 
 \section{Conclusion and Future Work}
-We have presented a novel conceptual and simulation framework for recursive self-improvement in AI systems. By formalizing the R\textsuperscript{1} triadic loop (Architect, Curator, Critic) and the R\textsuperscript{2} meta-recursive loop (MetaOverseer) with mechanisms for confidence-weighted updates and memory decay, we demonstrated a system capable of meta-adaptive resilience—robustly learning, generalizing, and self-correcting in noisy and dynamic environments. This work provides a concrete and benchmarkable approach to recursive self-improvement.
+We have presented a novel conceptual and simulation framework for recursive self-improvement in AI systems. By formalizing the R\textsuperscript{1} triadic loop (Architect, Curator, Critic) and the R\textsuperscript{2} meta-recursive loop (MetaGuidance) with mechanisms for confidence-weighted updates and memory decay, we demonstrated a system capable of meta-adaptive resilience—robustly learning, generalizing, and self-correcting in noisy and dynamic environments. This work provides a concrete and benchmarkable approach to recursive self-improvement.
 
 Future directions for this research include:
 \begin{itemize}
-    \item \textbf{Hierarchical Meta-Models:} Exploring deeper levels of recursion by stacking multiple MetaOverseers, where higher-level MetaOverseers optimize the behavior of lower-level ones.
-    \item \textbf{Probabilistic Task Graphs:} Implementing more sophisticated probabilistic models within the MetaOverseer to better predict task similarities and optimize configuration selection under uncertainty.
-    \item \textbf{Adversarial Environments:} Stress-testing the MetaOverseer's decision logic and resilience mechanisms against intentionally shifting or adversarial task environments.
+    \item \textbf{Hierarchical Meta-Models:} Exploring deeper levels of recursion by stacking multiple MetaGuidance, where higher-level MetaGuidance optimize the behavior of lower-level ones.
+    \item \textbf{Probabilistic Task Graphs:} Implementing more sophisticated probabilistic models within the MetaGuidance to better predict task similarities and optimize configuration selection under uncertainty.
+    \item \textbf{Adversarial Environments:} Stress-testing the MetaGuidance's decision logic and resilience mechanisms against intentionally shifting or adversarial task environments.
     \item \textbf{Integration with Real-World Benchmarks:} Applying and scaling the R\textsuperscript{1}/R\textsuperscript{2} framework to more complex, real-world meta-learning tasks and comparing its performance against state-of-the-art meta-learning algorithms.
 \end{itemize}
 We believe this framework represents a significant step towards developing truly self-improving and self-regulating AI agents that can continuously refine their capabilities in response to complex, evolving objectives.
