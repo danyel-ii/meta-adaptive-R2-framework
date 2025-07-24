@@ -1,0 +1,6 @@
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\linewidth]{figures/R1_loop_diagram.pdf}
+  \caption{Conceptual overview of the Recursive Self-Improvement Triadic Loop (R\textsuperscript{1}). The Architect (A) proposes designs, the Curator (D) prepares data and tasks, and the Critic (I) evaluates performance, with feedback cycling back to the Architect for iterative refinement.}
+  \label{fig:R1_diagram}
+\end{figure}
